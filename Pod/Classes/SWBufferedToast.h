@@ -24,6 +24,7 @@
 @interface SWBufferedToast : UIView <SWPlainToastDelegate>
 
 @property (nonatomic, assign) BOOL isLocked;
+@property (nonatomic) CGFloat dismissDistance;
 @property (nonatomic, weak) id <SWBufferedToastDelegate> delegate;
 
 - (instancetype)initPlainToastWithTitle:(NSString*)title
@@ -52,6 +53,11 @@
                               toastColor:(UIColor*)toastColor
                      animationImageNames:(NSArray*)animationImageNames
                                   onView:(UIView*)parentView;
+
+- (instancetype)initCustomToastWithView:(UIView*)customView
+                    animationImageNames:(NSArray*)animationImageNames
+                            andDelegate:(id)delegate
+                              andParent:(UIView*)parentView;
 
 - (void)appear;
 - (void)dismiss;

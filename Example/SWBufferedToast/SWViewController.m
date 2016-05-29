@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) SWBufferedToast *plainToast;
 @property (nonatomic, strong) SWBufferedToast *loginToast;
+@property (nonatomic, strong) SWBufferedToast *customToast;
 
 @property (nonatomic, readonly) UIColor *eggshellGreen;
 @property (nonatomic, readonly) UIColor *ectoplasmGreen;
@@ -109,6 +110,21 @@
     return _loginToast;
 }
 
+- (SWBufferedToast *)customToast
+{
+    if (!_customToast) {
+        UIView* customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 240, 240 * 9 / 16)];
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(12, 12, 200, 80)];
+        label.text = @"This is Custom!";
+        label.textColor = [UIColor whiteColor];
+        [customView addSubview:label];
+        customView.backgroundColor = [UIColor purpleColor];
+        customView.alpha = 0.8;
+        _customToast = [[SWBufferedToast alloc] initCustomToastWithView:customView animationImageNames:nil andDelegate:self andParent:self.view];
+        _customToast.dismissDistance = 150;
+    }
+    return _customToast;
+}
 
 #pragma mark - SWBufferedToastDelegate implementation
 - (void)didTapActionButtonWithToast:(SWBufferedToast *)toast
@@ -152,6 +168,9 @@
     //Called when a toast has been dismissed.
 }
 
+- (IBAction)didTapCustomButton:(id)sender {
+    [self.customToast appear];
+}
 
 #pragma mark - actions
 - (IBAction)exampleButtonTapped:(id)sender

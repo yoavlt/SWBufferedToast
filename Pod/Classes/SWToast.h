@@ -24,7 +24,8 @@
 typedef NS_ENUM(NSInteger, SWBufferedToastType) {
     SWBufferedToastTypePlain,
     SWBufferedToastTypeLogin,
-    SWBufferedToastTypeNotice
+    SWBufferedToastTypeNotice,
+    SWBufferedToastTypeCustom,
 };
 
 @interface SWToast : UIView <UITextFieldDelegate>
@@ -34,6 +35,7 @@ typedef NS_ENUM(NSInteger, SWBufferedToastType) {
 @property (nonatomic, readonly) BOOL loadingBlocksDismiss;
 @property (nonatomic, weak) id <SWPlainToastDelegate> plainToastDelegate;
 @property (nonatomic, weak) id <SWLoginToastDelegate> loginToastDelegate;
+@property (nonatomic, strong) UIView *customView;
 
 - (instancetype)initPlainToastWithColour:(UIColor*)color
                                    title:(NSString*)title
@@ -57,6 +59,10 @@ typedef NS_ENUM(NSInteger, SWBufferedToastType) {
                                  subtitle:(NSString*)subtitle
                       animationImageNames:(NSArray*)animationImageNames
                                 andParent:(UIView*)parentView;
+
+- (instancetype)initCustomToastWithView:(UIView*)customView
+                    animationImageNames:(NSArray*)animationImageNames
+                              andParent:(UIView*)parentView;
 
 - (void)appear;
 - (void)disappear;

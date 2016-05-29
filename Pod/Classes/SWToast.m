@@ -124,6 +124,25 @@ static NSString * const kBundlePath                 = @"SWBufferedToast";
     return self;
 }
 
+- (instancetype)initCustomToastWithView:(UIView *)customView
+                    animationImageNames:(NSArray *)animationImageNames
+                              andParent:(UIView *)parentView
+{
+    self = [super init];
+    
+    if (self) {
+        self.toastType = SWBufferedToastTypeCustom;
+        self.parentView = parentView;
+
+        self.layer.cornerRadius = kToastCornerRadius;
+        self.clipsToBounds = YES;
+
+        self.userAnimationImageNames = animationImageNames.mutableCopy;
+        self.customView = customView;
+    }
+
+    return self;
+}
 
 #pragma mark - lazy loaders
 - (NSBundle *)bundle
@@ -479,6 +498,9 @@ static NSString * const kBundlePath                 = @"SWBufferedToast";
         [SWToastConstraintManager applyTextfieldConstraintsForUsernameField:self.usernameField toTitleLabel:self.titleLabel onToast:self];
         [SWToastConstraintManager applyTextfieldConstraintsForPasswordField:self.passwordField toUsernameField:self.usernameField onToast:self];
         [SWToastConstraintManager applyButtonConstraintsForButton:self.actionButton onToast:self];
+    }
+    else if (self.toastType == SWBufferedToastTypeCustom) {
+        [SWToastConstraintManager applyCustomViewConstraintsForView:self.customView onToast:self];
     }
     else{
         [SWToastConstraintManager applySubtitleConstraintsForLabel:self.subtitleLabel toTitleLabel:self.titleLabel onToast:self];

@@ -107,6 +107,22 @@
     return self;
 }
 
+- (instancetype)initCustomToastWithView:(UIView*)customView
+                    animationImageNames:(NSArray*)animationImageNames
+                            andDelegate:(id)delegate
+                              andParent:(UIView*)parentView
+{
+    self = [super init];
+    if (self) {
+        self.parentView = parentView;
+        self.toastView = [[SWToast alloc] initCustomToastWithView:customView
+                                              animationImageNames:animationImageNames
+                                                        andParent:parentView];
+        self.delegate = delegate;
+        [self.toastView addGestureRecognizer:self.panGestureRecognizer];
+    }
+    return self;
+}
 
 #pragma mark - lazy loaders
 - (UIPanGestureRecognizer *)panGestureRecognizer
@@ -194,6 +210,10 @@
         [self.toastView setCenter:translatedPoint];
         
         if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
+            if (self.dismissDistance > 0 && abs(translatedPoint.y - self.firstY) > self.dismissDistance) {
+                [self dismiss];
+                return;
+            }
             CGFloat velocityX = (0.2*[(UIPanGestureRecognizer*)sender velocityInView:self].x);
             
             CGFloat finalX = self.firstX;

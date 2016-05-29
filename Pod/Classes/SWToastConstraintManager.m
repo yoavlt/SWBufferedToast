@@ -136,6 +136,50 @@
         }
             break;
             
+        case SWBufferedToastTypeCustom:
+        {
+            [parentView addSubview:toast];
+            toast.translatesAutoresizingMaskIntoConstraints = NO;
+            //Add view's constraints
+            float width  = toast.customView.frame.size.width;
+            float height = toast.customView.frame.size.height;
+            NSLayoutConstraint *widthConstraint     = [NSLayoutConstraint constraintWithItem:toast
+                                                                                   attribute:NSLayoutAttributeWidth
+                                                                                   relatedBy:0
+                                                                                      toItem:nil
+                                                                                   attribute:NSLayoutAttributeNotAnAttribute
+                                                                                  multiplier:1.0f
+                                                                                    constant:width];
+            
+            NSLayoutConstraint *heightConstraint    = [NSLayoutConstraint constraintWithItem:toast
+                                                                                   attribute:NSLayoutAttributeHeight
+                                                                                   relatedBy:0
+                                                                                      toItem:nil
+                                                                                   attribute:NSLayoutAttributeNotAnAttribute
+                                                                                  multiplier:1.0f
+                                                                                    constant:height];
+            
+            NSLayoutConstraint *constraintX         = [NSLayoutConstraint constraintWithItem:toast
+                                                                                   attribute:NSLayoutAttributeCenterX
+                                                                                   relatedBy:NSLayoutRelationEqual
+                                                                                      toItem:parentView
+                                                                                   attribute:NSLayoutAttributeCenterX
+                                                                                  multiplier:1.0f
+                                                                                    constant:0];
+            
+            NSLayoutConstraint *constraintY         = [NSLayoutConstraint constraintWithItem:toast
+                                                                                   attribute:NSLayoutAttributeCenterY
+                                                                                   relatedBy:NSLayoutRelationEqual
+                                                                                      toItem:parentView
+                                                                                   attribute:NSLayoutAttributeCenterY
+                                                                                  multiplier:1.0f
+                                                                                    constant:-(parentView.frame.size.height+height)];
+            
+            
+            [parentView addConstraints:@[widthConstraint, heightConstraint, constraintX, constraintY]];
+            return constraintY;
+        }
+            break;
         default:
         {
             [parentView addSubview:toast];
@@ -311,6 +355,47 @@
                                                                                 constant:-10.f];
     
     
+    [toast addConstraints:@[widthConstraint, constraintX, topConstraint, bottomConstraint]];
+}
+
++ (void)applyCustomViewConstraintsForView:(UIView *)view
+                                  onToast:(SWToast *)toast
+{
+    [toast addSubview:view];
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+
+    NSLayoutConstraint *widthConstraint         = [NSLayoutConstraint constraintWithItem:view
+                                                                               attribute:NSLayoutAttributeWidth
+                                                                               relatedBy:0
+                                                                                  toItem:toast
+                                                                               attribute:NSLayoutAttributeWidth
+                                                                              multiplier:1
+                                                                                constant:0];
+    
+    NSLayoutConstraint *constraintX             = [NSLayoutConstraint constraintWithItem:view
+                                                                               attribute:NSLayoutAttributeCenterX
+                                                                               relatedBy:NSLayoutRelationEqual
+                                                                                  toItem:toast
+                                                                               attribute:NSLayoutAttributeCenterX
+                                                                              multiplier:1.0f
+                                                                                constant:0];
+    
+    NSLayoutConstraint *topConstraint           = [NSLayoutConstraint constraintWithItem:view
+                                                                               attribute:NSLayoutAttributeTop
+                                                                               relatedBy:NSLayoutRelationEqual
+                                                                                  toItem:toast
+                                                                               attribute:NSLayoutAttributeTop
+                                                                              multiplier:1.0f
+                                                                                constant:0];
+    
+    NSLayoutConstraint *bottomConstraint        = [NSLayoutConstraint constraintWithItem:view
+                                                                               attribute:NSLayoutAttributeBottom
+                                                                               relatedBy:NSLayoutRelationEqual
+                                                                                  toItem:toast
+                                                                               attribute:NSLayoutAttributeBottom
+                                                                              multiplier:1.0f
+                                                                                constant:0];
+
     [toast addConstraints:@[widthConstraint, constraintX, topConstraint, bottomConstraint]];
 }
 
